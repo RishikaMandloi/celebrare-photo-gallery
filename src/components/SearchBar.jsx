@@ -1,16 +1,7 @@
-/**
- * SearchBar Component
- *
- * Provides a clean, modern input field for real-time filtering of photos
- * by author name. Features a search icon and a quick-clear button.
- *
- * @param {{ value: string, onChange: Function, onClear: Function }} props
- */
 export default function SearchBar({ value, onChange, onClear }) {
   return (
     <div className="w-full max-w-xl mx-auto mb-10">
       <div className="relative flex items-center shadow-sm rounded-full">
-        {/* Search Lens Icon */}
         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
           <svg
             className="w-5 h-5"
@@ -28,7 +19,6 @@ export default function SearchBar({ value, onChange, onClear }) {
           </svg>
         </div>
 
-        {/* Real-time Search Input */}
         <input
           type="text"
           value={value}
@@ -38,7 +28,6 @@ export default function SearchBar({ value, onChange, onClear }) {
           className="w-full pl-11 pr-11 py-3.5 bg-white border border-gray-200 rounded-full text-gray-900 placeholder-gray-400 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200"
         />
 
-        {/* Clear Button (only shown when user has typed something) */}
         {value && (
           <button
             type="button"
@@ -67,4 +56,3 @@ export default function SearchBar({ value, onChange, onClear }) {
     </div>
   );
 }
-

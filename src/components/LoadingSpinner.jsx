@@ -1,9 +1,3 @@
-/**
- * LoadingSpinner Component
- *
- * Displays a clean, modern animated spinner and friendly message
- * while the gallery photos are being fetched from the Picsum API.
- */
 export default function LoadingSpinner() {
   return (
     <div
@@ -11,7 +5,6 @@ export default function LoadingSpinner() {
       aria-live="polite"
       className="flex flex-col items-center justify-center py-24 px-4 text-center"
     >
-      {/* Animated Circular Spinner */}
       <div className="relative w-14 h-14 mb-4">
         <div className="absolute inset-0 rounded-full border-4 border-indigo-100"></div>
         <div className="w-14 h-14 rounded-full border-4 border-indigo-600 border-t-transparent animate-spin"></div>
@@ -26,4 +19,3 @@ export default function LoadingSpinner() {
     </div>
   );
 }
-

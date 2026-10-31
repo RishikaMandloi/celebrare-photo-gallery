@@ -1,35 +1,18 @@
 import { useState } from 'react';
 
-/**
- * PhotoCard Component
- *
- * Displays an individual photo card containing:
- * - Photo image loaded from Picsum (download_url) with proper object-fit styling
- * - Photographer / author name
- * - Accessible heart icon button that toggles the favourite state
- *
- * @param {{
- *   photo: { id: string|number, author: string, download_url: string, width: number, height: number },
- *   isFavourite: boolean,
- *   onToggleFavourite: (id: string|number) => void
- * }} props
- */
 export default function PhotoCard({ photo, isFavourite, onToggleFavourite }) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
   return (
     <article className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col">
-      {/* Photo Container */}
       <div className="relative w-full h-64 bg-gray-100 overflow-hidden">
-        {/* Loading skeleton placeholder while high-resolution image is downloading */}
         {!imageLoaded && !imageError && (
           <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse flex items-center justify-center">
             <span className="text-xs text-gray-400 font-medium">Loading image...</span>
           </div>
         )}
 
-        {/* Fallback if image fails to load */}
         {imageError ? (
           <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100 text-gray-400 p-4 text-center">
             <svg
@@ -59,7 +42,6 @@ export default function PhotoCard({ photo, isFavourite, onToggleFavourite }) {
           />
         )}
 
-        {/* Heart / Favourite Button overlay */}
         <button
           type="button"
           onClick={() => onToggleFavourite(photo.id)}
@@ -90,7 +72,6 @@ export default function PhotoCard({ photo, isFavourite, onToggleFavourite }) {
         </button>
       </div>
 
-      {/* Card Info */}
       <div className="p-4 flex items-center justify-between gap-2">
         <div className="min-w-0 flex-1">
           <p className="text-xs font-semibold tracking-wider uppercase text-indigo-600 mb-0.5">
@@ -104,7 +85,6 @@ export default function PhotoCard({ photo, isFavourite, onToggleFavourite }) {
           </h3>
         </div>
 
-        {/* Favourite Badge if active */}
         {isFavourite && (
           <span className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium text-red-700 bg-red-50 border border-red-200 px-2.5 py-1 rounded-full">
             <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
@@ -115,4 +95,3 @@ export default function PhotoCard({ photo, isFavourite, onToggleFavourite }) {
     </article>
   );
 }
-

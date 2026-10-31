@@ -10,28 +10,11 @@ import PhotoCard from './PhotoCard';
 import SearchBar from './SearchBar';
 import LoadingSpinner from './LoadingSpinner';
 
-/**
- * Gallery Component
- *
- * Core view for the Celebrare Photo Gallery application.
- * Satisfies all assignment requirements:
- * - Fetches photos via the useFetchPhotos custom hook
- * - Manages favourites state exclusively using useReducer and persists to localStorage
- * - Employs useCallback for the search input handler to avoid function recreation
- * - Employs useMemo for calculating filtered photos without redundant recalculation
- * - Renders a responsive grid: 1 col (mobile), 2 cols (tablet), 4 cols (desktop)
- */
 export default function Gallery() {
-  // Requirement 2 & 6: Fetch photos from Picsum API using the dedicated custom hook
   const { photos, loading, error } = useFetchPhotos();
-
-  // Search query state for author-based real-time filtering
   const [searchQuery, setSearchQuery] = useState('');
-
-  // Requirement 5: Manage favourites using useReducer with lazy initialization from localStorage
   const [favourites, dispatch] = useReducer(favouritesReducer, [], initFavourites);
 
-  // Requirement 5: Save updated favourites to browser localStorage whenever the favourites state changes
   useEffect(() => {
     try {
       localStorage.setItem(FAVOURITES_STORAGE_KEY, JSON.stringify(favourites));
@@ -40,31 +23,14 @@ export default function Gallery() {
     }
   }, [favourites]);
 
-  /**
-   * Requirement 7: useCallback hook
-   *
-   * Purpose: Memoizes the search input handler so that the exact same function reference
-   * is preserved across re-renders. This prevents unnecessary function re-creation on every render cycle
-   * (e.g., when the user toggles a favourite, causing Gallery to re-render), thereby optimizing
-   * performance and avoiding unnecessary downstream re-renders of the SearchBar component.
-   */
   const handleSearchChange = useCallback((e) => {
     setSearchQuery(e.target.value);
   }, []);
 
-  // Quick-clear callback for the search input
   const handleClearSearch = useCallback(() => {
     setSearchQuery('');
   }, []);
 
-  /**
-   * Requirement 7: useMemo hook
-   *
-   * Purpose: Memoizes the computed filtered photos list so that filtering by author name
-   * is only re-executed when either the 'photos' array or the 'searchQuery' actually changes.
-   * When other state changes occur (such as adding or removing a photo from favourites),
-   * this expensive array filtering operation is completely skipped, returning the cached result.
-   */
   const filteredPhotos = useMemo(() => {
     const trimmedQuery = searchQuery.trim().toLowerCase();
     if (!trimmedQuery) {
@@ -75,10 +41,6 @@ export default function Gallery() {
     );
   }, [photos, searchQuery]);
 
-  /**
-   * Handler to toggle favourite state for a given photo ID.
-   * Dispatches the TOGGLE_FAVOURITE action to the reducer.
-   */
   const handleToggleFavourite = (photoId) => {
     dispatch({
       type: FAVOURITES_ACTIONS.TOGGLE_FAVOURITE,
@@ -88,7 +50,6 @@ export default function Gallery() {
 
   return (
     <div className="w-full">
-      {/* Header Section */}
       <header className="text-center pt-10 pb-6 px-4">
         <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
           Photo Gallery
@@ -97,7 +58,6 @@ export default function Gallery() {
           Discover beautiful moments from around the world.
         </p>
 
-        {/* Favourites Status Badge */}
         {!loading && !error && (
           <div className="mt-4 flex items-center justify-center gap-2 text-sm text-gray-500">
             <span>
@@ -117,9 +77,7 @@ export default function Gallery() {
         )}
       </header>
 
-      {/* Main Content Area */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        {/* Requirement 4: Real-Time Search Bar (rendered above gallery once loaded or ready) */}
         {!loading && !error && (
           <SearchBar
             value={searchQuery}
@@ -128,10 +86,8 @@ export default function Gallery() {
           />
         )}
 
-        {/* State 1: Loading Spinner */}
         {loading && <LoadingSpinner />}
 
-        {/* State 2: User-Friendly Error Display */}
         {!loading && error && (
           <div
             role="alert"
@@ -168,7 +124,6 @@ export default function Gallery() {
           </div>
         )}
 
-        {/* State 3: Empty Search Result State */}
         {!loading && !error && filteredPhotos.length === 0 && (
           <div className="max-w-md mx-auto my-16 p-8 bg-white rounded-2xl border border-gray-200 text-center shadow-sm">
             <div className="w-12 h-12 mx-auto mb-3 text-gray-400 bg-gray-100 rounded-full flex items-center justify-center">
@@ -202,13 +157,6 @@ export default function Gallery() {
           </div>
         )}
 
-        {/* State 4: Responsive Gallery Grid */}
-        {/*
-          Requirement 3: Responsive Photo Gallery
-          - Mobile (default): 1 column (grid-cols-1)
-          - Tablet (md: 768px): 2 columns (md:grid-cols-2)
-          - Desktop (lg: 1024px): 4 columns (lg:grid-cols-4)
-        */}
         {!loading && !error && filteredPhotos.length > 0 && (
           <div>
             {searchQuery && (
@@ -232,4 +180,3 @@ export default function Gallery() {
     </div>
   );
 }
-
